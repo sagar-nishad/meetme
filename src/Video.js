@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
+import { Route, Redirect } from 'react-router'
 import faker from "faker";
-
+import { useHistory } from 'react-router-dom';
 import { IconButton, Badge, Input, Button } from "@material-ui/core";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import VideocamOffIcon from "@material-ui/icons/VideocamOff";
@@ -35,7 +36,6 @@ const peerConnectionConfig = {
 var socket = null;
 var socketId = null;
 var elms = 0;
-
 
 class Video extends Component {
   constructor(props) {
@@ -576,12 +576,13 @@ class Video extends Component {
         </div>
       );
     }
+    
     return (
       <div>
         {this.state.askForUsername === true ? (
           <div>
             <div
-            className="setUsername__Container"
+              className="setUsername__Container"
               style={{
                 background: "white",
                 width: "30%",
@@ -601,10 +602,17 @@ class Video extends Component {
               </p>
               <Input
                 placeholder="Username"
-                value={this.state.username}
-                // value={this.props.name}
+                value={localStorage.getItem("Name")}
                 onChange={(e) => this.handleUsername(e)}
               />
+             
+              {window.addEventListener("beforeunload", function (e) {
+                // localStorage.clear()
+                console.log("you pressed");
+                localStorage.clear()
+                localStorage.setItem('check',false)
+                
+              })}
               <Button
                 variant="contained"
                 color="primary"
@@ -628,7 +636,6 @@ class Video extends Component {
                 ref={this.localVideoref}
                 autoPlay
                 muted
-               
               ></video>
             </div>
           </div>

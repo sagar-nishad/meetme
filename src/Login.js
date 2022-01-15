@@ -8,10 +8,13 @@ import "./Login.css";
 import Background from "./Background";
 // import "./canva";
 
-function Login() {
+function Login(props) {
   const [{}, dispatch] = useStateValue();
   const singIn = () => {
     auth.signInWithPopup(provider).then((result) => {
+      localStorage.setItem('isauth',1)
+      localStorage.setItem('Name', result.user.displayName)
+      console.log(localStorage.getItem('Name'))
       dispatch({ type: actionTypes.SET_USER, user: result.user });
     });
   };

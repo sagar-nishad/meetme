@@ -1,7 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
 import Video from "./Video";
 import Home from "./Home";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route ,Redirect } from "react-router-dom";
 import Login from "./Login";
 import { useStateValue } from "./StateProvider";
 import Test from "./Test";
@@ -24,25 +24,38 @@ function App() {
   const [{ user }, dispatch] = useStateValue();
   // console.log("app->user", user,user.photoURL,user.displayName);
   // console.log(user.displayName);
+  useEffect(() => {
+    localStorage.setItem('isauth',0)
+  }, [])
+  
 
   return (
     <div>
       <Test a={"hi"} />
       <Router>
         <Switch>
-          <Route path="/:url" >
-            <Video  />
+          {console.log(typeof(parseInt(localStorage.getItem("isauth"))))}
+          {parseInt(localStorage.getItem("isauth"))?(<Route exact path="/:url" >
+            <Video name={localStorage.getItem('Name')}  />
             {/* <Video  /> */}
-          </Route>
+          </Route>)
+          :(
+            <Route path="/:url">
+              <Redirect to="/"/>
+              <Login />
+            </Route>
+          )}
           {user ? (
             <Route path="/">
               <Home name={user.displayName} />
+             
             </Route>
           ) : (
             <Route path="/">
               <Login />
             </Route>
           )}
+          
 
           {/* <Route path="/:url" component={user?Video:Login} /> */}
         </Switch>

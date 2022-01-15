@@ -33,7 +33,7 @@ class Home extends Component {
 	render() {
 		return (
 			<div className="container2">
-				
+				{console.log("home se ",localStorage.getItem('isauth'))}
 				
 				<div className="home__Title">
 					<h1 style={{ fontSize: "45px" }}>Meet ME</h1>
