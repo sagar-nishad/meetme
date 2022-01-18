@@ -50,8 +50,6 @@ body {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.4);
   height: 100%;
   max-width: 800px;
-  min-width: 80px !important;
-  min-height: 45px !important;
   max-height: 450px;
 }
 .my_Video {
@@ -64,6 +62,7 @@ body {
 
 }
 .setUsername__Container {
+  margin-bottom: 15px !important;
   border-radius: 10px;
   border: 3px solid #caf0f8 !important;
 }

@@ -1,7 +1,12 @@
 import React, { Component, useEffect, useState } from "react";
 import Video from "./Video";
 import Home from "./Home";
-import { BrowserRouter as Router, Switch, Route ,Redirect } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import Login from "./Login";
 import { useStateValue } from "./StateProvider";
 import Test from "./Test";
@@ -25,41 +30,48 @@ function App() {
   // console.log("app->user", user,user.photoURL,user.displayName);
   // console.log(user.displayName);
   useEffect(() => {
-    localStorage.setItem('isauth',0)
-  }, [])
-  
+    localStorage.setItem("isauth", 0);
+  }, []);
 
   return (
     <div>
-      <Test a={"hi"} />
+      {/****************************************************/}
       <Router>
         <Switch>
-          {console.log(typeof(parseInt(localStorage.getItem("isauth"))))}
-          {parseInt(localStorage.getItem("isauth"))?(<Route exact path="/:url" >
-            <Video name={localStorage.getItem('Name')}  />
-            {/* <Video  /> */}
-          </Route>)
-          :(
+          {console.log(typeof parseInt(localStorage.getItem("isauth")))}
+          {parseInt(localStorage.getItem("isauth")) ? (
+            <Route exact path="/:url">
+              <Video name={localStorage.getItem("Name")} />
+            </Route>
+          ) : (
             <Route path="/:url">
-              <Redirect to="/"/>
+              <Redirect to="/" />
               <Login />
             </Route>
           )}
           {user ? (
             <Route path="/">
               <Home name={user.displayName} />
-             
             </Route>
           ) : (
             <Route path="/">
               <Login />
             </Route>
           )}
-          
-
-          {/* <Route path="/:url" component={user?Video:Login} /> */}
         </Switch>
       </Router>
+      {/****************************************************/}
+      {/* <Router>
+        <Switch>
+          <Route path="/:url">
+            <Video />
+          </Route>
+          <Route path="/">
+            <Home />
+          </Route>
+        </Switch>
+      </Router> */}
+      {/****************************************************/}
     </div>
   );
 }

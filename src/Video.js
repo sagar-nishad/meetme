@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import { Route, Redirect } from 'react-router'
+import { Route, Redirect } from "react-router";
 import faker from "faker";
-import { useHistory } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
 import { IconButton, Badge, Input, Button } from "@material-ui/core";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import VideocamOffIcon from "@material-ui/icons/VideocamOff";
@@ -20,6 +20,7 @@ import { Row } from "reactstrap";
 import Modal from "react-bootstrap/Modal";
 import "bootstrap/dist/css/bootstrap.css";
 import "./Video.css";
+import { GroupOutlined } from "@material-ui/icons";
 
 const server_url =
   process.env.NODE_ENV === "production"
@@ -51,12 +52,16 @@ class Video extends Component {
       audio: false,
       screen: false,
       showModal: false,
+      showUsers: false,
       screenAvailable: false,
       messages: [],
       message: "",
       newmessages: 0,
       askForUsername: true,
-      username: faker.internet.userName(),
+      noUsers: 0,
+      users: [],
+      // username: faker.internet.userName(),
+      username: localStorage.getItem("Name"),
     };
     connections = {};
 
@@ -108,6 +113,7 @@ class Video extends Component {
       () => {
         this.getUserMedia();
         this.connectToSocketServer();
+        this.addUser();
       }
     );
   };
@@ -359,6 +365,11 @@ class Video extends Component {
       socketId = socket.id;
 
       socket.on("chat-message", this.addMessage);
+      socket.on("NEW_USERS", (newUser) => {
+        this.setState((prevState) => ({
+          users: newUser,
+        }));
+      });
 
       socket.on("user-left", (id) => {
         let video = document.querySelector(`[data-socket="${id}"]`);
@@ -497,6 +508,8 @@ class Video extends Component {
 
   openChat = () => this.setState({ showModal: true, newmessages: 0 });
   closeChat = () => this.setState({ showModal: false });
+  openUsers = () => this.setState({ showUsers: true });
+  closeUsers = () => this.setState({ showUsers: false });
   handleMessage = (e) => this.setState({ message: e.target.value });
 
   addMessage = (data, sender, socketIdSender) => {
@@ -507,8 +520,19 @@ class Video extends Component {
       this.setState({ newmessages: this.state.newmessages + 1 });
     }
   };
+  // FIXME:
 
-  handleUsername = (e) => this.setState({ username: e.target.value });
+  addUser = () => {
+    socket.emit("add_user", {
+      username: this.state.username,
+      users: this.state.users,
+    });
+  };
+
+  handleUsername = (e) => {
+    this.setState({ username: e.target.value });
+    localStorage.setItem("Name", e.target.value);
+  };
 
   sendMessage = () => {
     socket.emit("chat-message", this.state.message, this.state.username);
@@ -542,8 +566,10 @@ class Video extends Component {
     );
   };
 
-  connect = () =>
+  connect = () => {
     this.setState({ askForUsername: false }, () => this.getMedia());
+    // FIXME:
+  };
 
   isChrome = function () {
     let userAgent = (navigator && (navigator.userAgent || "")).toLowerCase();
@@ -576,7 +602,7 @@ class Video extends Component {
         </div>
       );
     }
-    
+
     return (
       <div>
         {this.state.askForUsername === true ? (
@@ -605,13 +631,12 @@ class Video extends Component {
                 value={localStorage.getItem("Name")}
                 onChange={(e) => this.handleUsername(e)}
               />
-             
+
               {window.addEventListener("beforeunload", function (e) {
                 // localStorage.clear()
                 console.log("you pressed");
-                localStorage.clear()
-                localStorage.setItem('check',false)
-                
+                localStorage.clear();
+                localStorage.setItem("check", false);
               })}
               <Button
                 variant="contained"
@@ -700,8 +725,57 @@ class Video extends Component {
                   <ChatIcon />
                 </IconButton>
               </Badge>
+              {/* FIXME: the participant button */}
+              {/*================================================*/}
+              <Badge
+                badgeContent={this.state.users.length}
+                max={999}
+                color="secondary"
+                onClick={this.openUsers}
+              >
+                <IconButton
+                  style={{ color: "#424242" }}
+                  onClick={this.openUsers}
+                >
+                  <GroupOutlined />
+                </IconButton>
+              </Badge>
+              {/*================================================*/}
             </div>
+            {/*================================================*/}
 
+            {/* TODO: the participants modal */}
+            <Modal
+              show={this.state.showUsers}
+              onHide={this.closeUsers}
+              style={{ zIndex: "999999" }}
+            >
+              <Modal.Header closeButton>
+                <Modal.Title>Current Participants</Modal.Title>
+              </Modal.Header>
+              <Modal.Body
+                style={{
+                  overflow: "auto",
+                  overflowY: "auto",
+                  height: "400px",
+                  textAlign: "left",
+                }}
+              >
+                {this.state.users.length > 0 ? (
+                  this.state.users.map((item, index) => (
+                    <div key={index} style={{ textAlign: "left" }}>
+                      <p style={{ wordBreak: "break-all" }}>
+                        <b>{item}</b>
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p>No Participants</p>
+                )}
+              </Modal.Body>
+            </Modal>
+            {/* ================================================================= */}
+            {/* TODO: the messages modal */}
             <Modal
               show={this.state.showModal}
               onHide={this.closeChat}
@@ -745,6 +819,7 @@ class Video extends Component {
                 </Button>
               </Modal.Footer>
             </Modal>
+            {/* ================================================================= */}
 
             <div className="container">
               <div style={{ paddingTop: "20px" }}>

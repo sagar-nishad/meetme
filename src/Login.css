@@ -37,7 +37,7 @@ canvas {
   color: var(--col2) !important;
   transition: all 100ms ease-in-out !important;
   border-color: #caf0f8 !important;
-  box-shadow: 0px 0px 15px rgba(128, 216, 243,0.9) !important;
+  box-shadow: 0px 0px 15px rgba(128, 216, 243,0.8) !important;
 }
 /* 
 bde0fe
