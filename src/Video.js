@@ -1,8 +1,5 @@
 import React, { Component } from "react";
 import io from "socket.io-client";
-import { Route, Redirect } from "react-router";
-import faker from "faker";
-import { useHistory } from "react-router-dom";
 import { IconButton, Badge, Input, Button } from "@material-ui/core";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import VideocamOffIcon from "@material-ui/icons/VideocamOff";
@@ -21,6 +18,7 @@ import Modal from "react-bootstrap/Modal";
 import "bootstrap/dist/css/bootstrap.css";
 import "./Video.css";
 import { GroupOutlined } from "@material-ui/icons";
+import Background2 from "./Background2";
 
 const server_url =
   process.env.NODE_ENV === "production"
@@ -607,6 +605,7 @@ class Video extends Component {
       <div>
         {this.state.askForUsername === true ? (
           <div>
+            <Background2 />
             <div
               className="setUsername__Container"
               style={{
@@ -823,7 +822,11 @@ class Video extends Component {
 
             <div className="container">
               <div style={{ paddingTop: "20px" }}>
-                <Input value={window.location.href} disable="true"></Input>
+                <Input
+                style={{
+                  color: "white",
+                }}
+                value={window.location.href} disable="true"></Input>
                 <Button
                   style={{
                     backgroundColor: "#3f51b5",
@@ -838,7 +841,7 @@ class Video extends Component {
                   Copy invite link
                 </Button>
               </div>
-
+              <Background2 />
               <Row
                 id="main"
                 className="flex-container"

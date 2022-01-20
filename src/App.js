@@ -49,7 +49,9 @@ function App() {
               <Login />
             </Route>
           )}
-          {user ? (
+          {
+          user 
+          ? (
             <Route path="/">
               <Home name={user.displayName} />
             </Route>
