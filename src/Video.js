@@ -22,7 +22,7 @@ import Background2 from "./Background2";
 
 const server_url =
   process.env.NODE_ENV === "production"
-    ? "https://video.sebastienbiollo.com"
+    ? window.location.origin
     : "http://localhost:4001";
 
 var connections = {};
