@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import { Input, Button, IconButton } from "@material-ui/core";
 import "./Home.css";
-import { useStateValue } from "./StateProvider";
 import Profile from "./Profile";
-import Test from "./Test";
 import Background2 from "./Background2";
 
 class Home extends Component {
@@ -43,7 +41,6 @@ class Home extends Component {
             <Profile />
           </div>
 
-          <Test a={"hi"} />
           <div
             style={{
               background: "white",

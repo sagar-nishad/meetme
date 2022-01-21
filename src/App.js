@@ -9,7 +9,6 @@ import {
 } from "react-router-dom";
 import Login from "./Login";
 import { useStateValue } from "./StateProvider";
-import Test from "./Test";
 
 // class App extends Component {
 //   render() {
