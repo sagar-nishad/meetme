@@ -22,7 +22,7 @@ import Background2 from "./Background2";
 
 const server_url =
   process.env.NODE_ENV === "production"
-    ? window.location.origin
+    ? "https://meetme-nav.herokuapp.com/"
     : "http://localhost:4001";
 
 var connections = {};
