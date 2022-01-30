@@ -24,6 +24,15 @@ app.set("port", process.env.PORT || 4001);
 sanitizeString = (str) => {
   return xss(str);
 };
+// ****************************************************************
+function removeItemOnce(arr, value) {
+  var index = arr.indexOf(value);
+  if (index > -1) {
+    arr.splice(index, 1);
+  }
+  return arr;
+}
+// ****************************************************************
 
 connections = {};
 messages = {};
@@ -31,12 +40,20 @@ timeOnline = {};
 users = [];
 
 io.on("connection", (socket) => {
-  socket.on("add_user", (data) => {
-    console.log("Some data received =>>> ", data.username);
-    users.push(data.username);
-    socket.emit("NEW_USERS",users);
+  socket.on("REMOVE_USER", (Rusername) => {
+    users = removeItemOnce(users, Rusername);
+    io.emit("NEW_USERS",users);
+    
+    
   });
+
   socket.on("join-call", (path) => {
+    console.log("connection =>>>",connections);
+    socket.on("add_user", (data) => {
+      console.log("Some data received =>>> ", data.username);
+      users.push(data.username);
+      io.emit("NEW_USERS", users );
+    });
     if (connections[path] === undefined) {
       connections[path] = [];
     }
@@ -63,7 +80,10 @@ io.on("connection", (socket) => {
       }
     }
 
-    console.log(path, connections[path]);
+    console.log("test",path, connections[path]);
+    console.log("connection 2 =>>>",connections);
+
+
   });
 
   socket.on("signal", (toId, message) => {

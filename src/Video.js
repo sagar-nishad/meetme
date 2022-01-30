@@ -366,12 +366,13 @@ class Video extends Component {
 
       socket.on("chat-message", this.addMessage);
       socket.on("NEW_USERS", (newUser) => {
-        this.setState((prevState) => ({
+        this.setState({
           users: newUser,
-        }));
+        });
       });
 
       socket.on("user-left", (id) => {
+        socket.emit("REMOVE_USER",this.state.username);
         let video = document.querySelector(`[data-socket="${id}"]`);
         if (video !== null) {
           elms--;
@@ -411,27 +412,36 @@ class Video extends Component {
               elms = clients.length;
               let main = document.getElementById("main");
               let cssMesure = this.changeCssVideos(main);
-
               let video = document.createElement("video");
-
+              // let conDiv= document.createElement("div");
+              // let pinBtn= document.createElement("button");
+              // conDiv.classList.add("vidContainer")
+              // video.classList.add("myVideo")
+              
+              // FIXME: DUSRO KA VIDEO
+              // let Objf=this.state.screen?"contain":"fill"
+              
               let css = {
                 minWidth: cssMesure.minWidth,
                 minHeight: cssMesure.minHeight,
                 maxHeight: "100%",
                 margin: "10px",
-                borderStyle: "solid",
-                borderColor: "#bdbdbd",
-                objectFit: "fill",
+                maxWidth: "800px",
+                objectFit: "contain",
               };
               for (let i in css) video.style[i] = css[i];
 
+              
               video.style.setProperty("width", cssMesure.width);
               video.style.setProperty("height", cssMesure.height);
               video.setAttribute("data-socket", socketListId);
               video.srcObject = event.stream;
               video.autoplay = true;
               video.playsinline = true;
-
+              // pinBtn.innerText="Pin"
+              
+              // conDiv.appendChild(pinBtn);
+              // conDiv.appendChild(video);
               main.appendChild(video);
             }
           };
@@ -649,12 +659,14 @@ class Video extends Component {
             </div>
 
             <div
+            className="Video_Container"
               style={{
                 justifyContent: "center",
                 textAlign: "center",
-                paddingTop: "40px",
+                paddingTop: "10px",
               }}
             >
+              {/* FIXME: this is My video PREVIE*/}
               <video
                 id="my-video"
                 className="my_Video"
@@ -844,23 +856,30 @@ class Video extends Component {
                 className="flex-container"
                 style={{ margin: 0, padding: 0 }}
               >
+                {/* <div className="vidContainer">
+                  <button>Pin</button> */}
+
                 <video
-                  id="my-video"
-                  className="myVideo"
-                  ref={this.localVideoref}
-                  autoPlay
-                  muted
-                  style={{
-                    // borderStyle: "solid",
-                    // borderColor: "#bdbdbd",
-                    margin: "10px",
-                    objectFit: "fill",
-                    width: "100%",
-                    height: "100%",
-                    maxWidth: "700px",
-                    maxHeight: "700px",
-                  }}
+                // FIXME: Mera Video
+                id="my-video"
+                className="myVideo"
+                ref={this.localVideoref}
+                autoPlay
+                muted
+                // poster="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfeCZ70igndqREneQPSf6p42hq81HTIJ8QRA&usqp=CAU"
+                style={{
+                  // borderStyle: "solid",
+                  // borderColor: "#bdbdbd",
+                  // margin: "10px",
+                  // objectFit: this.state.screen?"contain":"fill",
+                  objectFit: "contain",
+                  width: "100%",
+                  height: "100%",
+                  maxWidth: "800px" ,
+                  // maxHeight: "700px",
+                }}
                 ></video>
+                {/* </div> */}
               </Row>
             </div>
           </div>
