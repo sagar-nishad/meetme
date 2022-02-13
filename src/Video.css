@@ -2,6 +2,9 @@ body {
   margin: 0;
   
 }
+video{
+  transition: all 0.25s ease-in-out;
+}
 
 .flex-container {
   height: calc(100% - 150px) !important;
@@ -82,4 +85,21 @@ body {
   height: 100%;
   max-width: 800px !important;
   
+}
+
+.MAXWIDTH{
+  width: 80vw !important;
+  /* object-fit: fill !important; */
+}
+
+.video__containerDiv{
+  border: 1px solid red;
+}
+.videoClass{
+  width:100% !important;
+  height:100% !important;
+}
+
+.soundON{
+  border: 1px solid blue;
 }

@@ -35,7 +35,7 @@ function App() {
   return (
     <div>
       {/****************************************************/}
-      <Router>
+      {/* <Router>
         <Switch>
           {console.log(typeof parseInt(localStorage.getItem("isauth")))}
           {parseInt(localStorage.getItem("isauth")) ? (
@@ -60,9 +60,9 @@ function App() {
             </Route>
           )}
         </Switch>
-      </Router>
+      </Router> */}
       {/****************************************************/}
-      {/* <Router>
+      <Router>
         <Switch>
           <Route path="/:url">
             <Video />
@@ -71,7 +71,7 @@ function App() {
             <Home />
           </Route>
         </Switch>
-      </Router> */}
+      </Router>
       {/****************************************************/}
     </div>
   );

@@ -38,6 +38,8 @@ connections = {};
 messages = {};
 timeOnline = {};
 users = [];
+audioOn={};
+
 
 io.on("connection", (socket) => {
   socket.on("REMOVE_USER", (Rusername) => {
@@ -46,12 +48,19 @@ io.on("connection", (socket) => {
     
     
   });
+  socket.on("audio_ON",(id)=>{
+    console.log("audio id",id);
+    audioOn[id]=!audioOn[id];
+    io.emit("audio_UPDATE",audioOn);
+  });
 
   socket.on("join-call", (path) => {
     console.log("connection =>>>",connections);
     socket.on("add_user", (data) => {
       console.log("Some data received =>>> ", data.username);
       users.push(data.username);
+      audioOn[socket.id]=false;
+      console.log("audio list >>>",audioOn)
       io.emit("NEW_USERS", users );
     });
     if (connections[path] === undefined) {
